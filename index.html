@@ -310,8 +310,10 @@
         </div>
       </div>
 
-      <form class="contact-form"
-        onsubmit="event.preventDefault(); alert('Placeholder: this form is not yet connected to send messages.');">
+      <form class="contact-form" name="submit-to-google-sheet">
+        <!-- Invisible anti-spam honeypot field -->
+        <input type="text" name="website" style="display:none" tabindex="-1" autocomplete="off">
+        
         <div class="field">
           <label for="name">Full name</label>
           <input type="text" id="name" name="name" required>
@@ -346,7 +348,10 @@
           <label for="message">Message (optional)</label>
           <textarea id="message" name="message"></textarea>
         </div>
+        
         <button type="submit" class="btn btn-primary">Send Inquiry</button>
+        <!-- Status message container -->
+        <div id="msg" style="margin-top: 15px; font-weight: 500;"></div>
       </form>
     </div>
   </section>

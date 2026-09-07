@@ -72,4 +72,44 @@ document.addEventListener('DOMContentLoaded', function () {
       });
     });
   }
+
+  // Remember to replace this with your NEW Apps Script deployment URL
+  const scriptURL = 'https://script.google.com/macros/s/AKfycbwsdjzOVCu6s8z8ZMFk8f7mr1gGBwvauztEZKuCIBJ7MDSI_QiI-bkXW-XoihRCkVpj/exec';
+  const form = document.forms['submit-to-google-sheet'];
+  const msg = document.getElementById('msg');
+
+  if (form) {
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Honeypot check
+      const hp = form.querySelector('input[name="website"]');
+      if (hp && hp.value) return;
+
+      msg.textContent = 'Sending inquiry...';
+      msg.style.color = '#333';
+
+      try {
+      // The 'no-cors' mode tells the browser to just send the data and not worry about reading Google's redirect response
+      fetch(scriptURL, { 
+        method: 'POST', 
+        body: new FormData(form),
+        mode: 'no-cors'
+      });
+
+      // Since we aren't waiting for the JSON, we immediately show success
+      msg.textContent = 'Inquiry sent successfully! We will be in touch soon.';
+      msg.style.color = 'green';
+      form.reset();
+
+    } catch (error) {
+      msg.textContent = 'Network error. Please try again.';
+      msg.style.color = 'red';
+      console.error(error);
+    }
+
+      // Clear the message after 5 seconds
+      setTimeout(() => { msg.textContent = ''; }, 5000);
+    });
+  }
 });
